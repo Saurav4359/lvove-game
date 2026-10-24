@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fbf4ec" />
+    <meta name="description" content="A tiny date-night game for two: sweet questions, playful dares, and a little chat." />
+    <title>ours — Little heart match</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="#top" aria-label="ours home">
+          <span class="wordmark-heart" aria-hidden="true">♥</span>
+          <span>ours</span>
+        </a>
+        <div class="topbar-note"><span class="sun-dot" aria-hidden="true"></span> a little time for two</div>
+      </header>
+
+      <section class="intro" id="top" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> YOUR POCKET-SIZED DATE NIGHT</p>
+          <h1 id="page-title">Make a little<br /><em>time for us.</em></h1>
+          <p class="intro-description">Take turns finding matching little symbols, collect hearts, and share a sweet story whenever you make a pair.</p>
+          <div class="intro-details">
+            <span class="detail-icon" aria-hidden="true">✦</span>
+            <span>Find a match. Win a heart. Share the story.</span>
+          </div>
+        </div>
+        <div class="intro-art" aria-hidden="true">
+          <div class="art-sun"></div>
+          <div class="art-window"><span></span><span></span><span></span><span></span></div>
+          <div class="art-table"></div>
+          <div class="art-vase"><i></i><i></i><i></i></div>
+          <div class="art-cup cup-left"><span></span></div>
+          <div class="art-cup cup-right"><span></span></div>
+          <div class="art-heart">♥</div>
+          <div class="art-caption">just the two of you</div>
+        </div>
+      </section>
+
+      <section class="play-area" aria-label="Date night game">
+        <section class="game-card panel" aria-labelledby="game-title">
+          <div class="game-card-top">
+            <div>
+              <p class="section-kicker">A TWO-PLAYER MEMORY GAME</p>
+              <h2 id="game-title">Little heart match</h2>
+            </div>
+            <div class="quest-count" aria-live="polite">
+              <span id="pairs-left">6 PAIRS LEFT</span>
+            </div>
+          </div>
+
+          <div class="player-scoreboard" aria-label="Player scores">
+            <div class="player-score is-active" id="player-you">
+              <span class="player-bubble" aria-hidden="true">♡</span>
+              <span class="player-name">YOU</span>
+              <span class="player-points" id="score-you">0</span>
+            </div>
+            <span class="score-divider">playing together</span>
+            <div class="player-score" id="player-partner">
+              <span class="player-bubble partner-bubble" aria-hidden="true">✿</span>
+              <span class="player-name">PARTNER</span>
+              <span class="player-points" id="score-partner">0</span>
+            </div>
+          </div>
+
+          <div class="turn-status" id="turn-status" aria-live="polite">
+            <span class="turn-indicator" aria-hidden="true">♥</span>
+            <span>Your turn — flip two cards.</span>
+          </div>
+
+          <div class="memory-board" id="memory-board" role="grid" aria-label="Twelve face-down memory cards"></div>
+
+          <div class="game-actions">
+            <button class="button button-primary" id="new-game" type="button"><span aria-hidden="true">↻</span> New game</button>
+            <span class="game-rule">Match a pair to earn a heart and keep your turn.</span>
+          </div>
+          <p class="match-message" id="match-message" aria-live="polite">Find a pair, then tell the little story on the card.</p>
+          <div class="game-footnote"><span aria-hidden="true">☾</span> Take turns on one screen. A match comes with a conversation prompt.</div>
+        </section>
+
+        <aside class="chat-card panel" aria-labelledby="chat-title">
+          <div class="chat-heading">
+            <div class="chat-title-wrap">
+              <div class="chat-avatar" aria-hidden="true"><span>♡</span></div>
+              <div>
+                <p class="section-kicker">YOUR LITTLE CORNER</p>
+                <h2 id="chat-title">Say it here</h2>
+              </div>
+            </div>
+            <span class="chat-status"><span></span> local notes</span>
+          </div>
+
+          <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions text">
+            <div class="chat-empty" id="chat-empty">
+              <span class="empty-sparkle" aria-hidden="true">✦</span>
+              <p>Your little notes will show up here.</p>
+              <span>Start with a hello, or react to a card.</span>
+            </div>
+          </div>
+
+          <form class="chat-compose" id="chat-form">
+            <label class="visually-hidden" for="chat-input">Write a message</label>
+            <input id="chat-input" name="message" type="text" maxlength="280" placeholder="Write a little something…" autocomplete="off" />
+            <button class="send-button" type="submit" aria-label="Send message"><span aria-hidden="true">↑</span></button>
+          </form>
+          <div class="chat-bottomline"><span>♡</span> little words, kept on this device</div>
+        </aside>
+      </section>
+
+      <footer class="page-footer">
+        <span>made for the moments in between</span>
+        <span class="footer-heart" aria-hidden="true">♥</span>
+        <span>one card at a time</span>
+      </footer>
+    </main>
+  </body>
+</html>
