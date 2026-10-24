@@ -59,13 +59,13 @@
           <div class="player-scoreboard" aria-label="Player scores">
             <div class="player-score is-active" id="player-you">
               <span class="player-bubble" aria-hidden="true">♡</span>
-              <span class="player-name">YOU</span>
+              <input class="player-name-input" id="player-name-you" type="text" maxlength="18" value="You" aria-label="Your display name" />
               <span class="player-points" id="score-you">0</span>
             </div>
             <span class="score-divider">playing together</span>
             <div class="player-score" id="player-partner">
               <span class="player-bubble partner-bubble" aria-hidden="true">✿</span>
-              <span class="player-name">PARTNER</span>
+              <input class="player-name-input" id="player-name-partner" type="text" maxlength="18" value="Partner" aria-label="Partner display name" />
               <span class="player-points" id="score-partner">0</span>
             </div>
           </div>

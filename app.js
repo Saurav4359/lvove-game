@@ -8,8 +8,11 @@ const pairs = [
 ];
 
 const chatStorageKey = "ours-date-night-chat-v1";
+const namesStorageKey = "ours-date-night-player-names-v1";
+const defaultNames = ["You", "Partner"];
 let game = createGame();
 let messages = loadMessages();
+let playerNames = loadPlayerNames();
 let flipTimer = null;
 
 const board = document.querySelector("#memory-board");
@@ -42,6 +45,28 @@ function loadMessages() {
     // Chat remains usable for this session when browser storage is unavailable.
   }
   return [];
+}
+
+function loadPlayerNames() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(namesStorageKey));
+    if (Array.isArray(saved)) return defaultNames.map((fallback, index) => typeof saved[index] === "string" && saved[index].trim() ? saved[index].trim().slice(0, 18) : fallback);
+  } catch (error) {
+    // Names can still be edited for this session when browser storage is unavailable.
+  }
+  return [...defaultNames];
+}
+
+function savePlayerNames() {
+  try {
+    localStorage.setItem(namesStorageKey, JSON.stringify(playerNames));
+  } catch (error) {
+    // Keep the current session usable if browser storage is unavailable.
+  }
+}
+
+function playerName(index) {
+  return playerNames[index] || defaultNames[index];
 }
 
 function saveMessages() {
@@ -89,14 +114,14 @@ function finishTurnAfterMiss() {
   game.flipped = [];
   game.locked = false;
   game.activePlayer = game.activePlayer === 0 ? 1 : 0;
-  setTurnStatus("No match — " + (game.activePlayer === 0 ? "your" : "your partner’s") + " turn.");
+  setTurnStatus("No match — " + playerName(game.activePlayer) + "’s turn.");
   renderBoard();
 }
 
 function finishGame() {
   game.over = true;
   const [you, partner] = game.scores;
-  const result = you === partner ? "It’s a tie!" : you > partner ? "You win this round!" : "Your partner wins this round!";
+  const result = you === partner ? "It’s a tie!" : you > partner ? playerName(0) + " wins this round!" : playerName(1) + " wins this round!";
   setTurnStatus("You found all six pairs. " + result);
   matchMessage.textContent = "Six sweet stories collected. Play again or stay here and talk.";
 }
@@ -107,7 +132,7 @@ function flipCard(index) {
   renderBoard();
 
   if (game.flipped.length === 1) {
-    setTurnStatus((game.activePlayer === 0 ? "You" : "Your partner") + " — pick one more card.");
+    setTurnStatus(playerName(game.activePlayer) + " — pick one more card.");
     return;
   }
 
@@ -120,7 +145,7 @@ function flipCard(index) {
     game.matched.add(secondIndex);
     game.scores[game.activePlayer] += 1;
     matchMessage.textContent = firstCard.symbol + "  " + firstCard.prompt;
-    setTurnStatus((game.activePlayer === 0 ? "Your" : "Your partner’s") + " match! Keep the turn and share the story.");
+    setTurnStatus(playerName(game.activePlayer) + " found a match! Keep the turn and share the story.");
     renderBoard();
     if (game.matched.size === game.cards.length) {
       game.locked = false;
@@ -150,8 +175,19 @@ document.querySelector("#new-game").addEventListener("click", () => {
   if (flipTimer) window.clearTimeout(flipTimer);
   game = createGame();
   matchMessage.textContent = "Find a pair, then tell the little story on the card.";
-  setTurnStatus("Your turn — flip two cards.");
+  setTurnStatus(playerName(0) + "’s turn — flip two cards.");
   renderBoard();
+});
+
+document.querySelectorAll(".player-name-input").forEach((input, index) => {
+  input.value = playerName(index);
+  input.addEventListener("input", () => {
+    playerNames[index] = input.value.trim() || defaultNames[index];
+    savePlayerNames();
+  });
+  input.addEventListener("blur", () => {
+    input.value = playerName(index);
+  });
 });
 
 function renderMessages() {
@@ -183,6 +219,6 @@ document.querySelector("#chat-form").addEventListener("submit", (event) => {
   chatInput.focus();
 });
 
-setTurnStatus("Your turn — flip two cards.");
+setTurnStatus(playerName(0) + "’s turn — flip two cards.");
 renderBoard();
 renderMessages();
