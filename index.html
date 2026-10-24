@@ -101,7 +101,10 @@
                 <h2 id="chat-title">Say it here</h2>
               </div>
             </div>
-            <span class="chat-status"><span></span> local notes</span>
+            <div class="chat-heading-actions">
+              <button class="clear-chat" id="clear-chat" type="button">Clear notes</button>
+              <span class="chat-status"><span></span> local notes</span>
+            </div>
           </div>
 
           <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions text">
@@ -112,6 +115,13 @@
             </div>
           </div>
 
+          <div class="chat-sender">
+            <label for="chat-speaker">Writing as</label>
+            <select id="chat-speaker" aria-label="Choose who is writing">
+              <option value="0">You</option>
+              <option value="1">Partner</option>
+            </select>
+          </div>
           <form class="chat-compose" id="chat-form">
             <label class="visually-hidden" for="chat-input">Write a message</label>
             <input id="chat-input" name="message" type="text" maxlength="280" placeholder="Write a little something…" autocomplete="off" />

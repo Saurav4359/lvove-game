@@ -27,6 +27,7 @@ const scorePartner = document.querySelector("#score-partner");
 const messageList = document.querySelector("#chat-messages");
 const chatEmpty = document.querySelector("#chat-empty");
 const chatInput = document.querySelector("#chat-input");
+const chatSpeaker = document.querySelector("#chat-speaker");
 
 function createGame(pairCount = selectedPairCount) {
   const cards = pairs.slice(0, pairCount).flatMap((pair, pairId) => [
@@ -200,23 +201,29 @@ document.querySelectorAll(".player-name-input").forEach((input, index) => {
   input.addEventListener("input", () => {
     playerNames[index] = input.value.trim() || defaultNames[index];
     savePlayerNames();
+    chatSpeaker.options[index].textContent = playerName(index);
   });
   input.addEventListener("blur", () => {
     input.value = playerName(index);
   });
 });
+chatSpeaker.options[0].textContent = playerName(0);
+chatSpeaker.options[1].textContent = playerName(1);
 
 function renderMessages() {
   messageList.querySelectorAll(".chat-message").forEach((message) => message.remove());
   chatEmpty.hidden = messages.length > 0;
   messages.forEach((message) => {
     const bubble = document.createElement("article");
-    bubble.className = "chat-message";
+    bubble.className = "chat-message" + (message.player === 1 ? " from-partner" : "");
+    const author = document.createElement("span");
+    author.className = "chat-author";
+    author.textContent = message.author || playerName(message.player === 1 ? 1 : 0);
     const text = document.createElement("p");
     text.textContent = message.text;
     const time = document.createElement("time");
     time.textContent = message.time;
-    bubble.append(text, time);
+    bubble.append(author, text, time);
     messageList.append(bubble);
   });
   messageList.scrollTop = messageList.scrollHeight;
@@ -226,13 +233,21 @@ document.querySelector("#chat-form").addEventListener("submit", (event) => {
   event.preventDefault();
   const text = chatInput.value.trim();
   if (!text) return;
+  const player = Number(chatSpeaker.value) === 1 ? 1 : 0;
   const time = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date());
-  messages.push({ text, time });
+  messages.push({ text, time, player, author: playerName(player) });
   messages = messages.slice(-80);
   saveMessages();
   renderMessages();
   chatInput.value = "";
   chatInput.focus();
+});
+
+document.querySelector("#clear-chat").addEventListener("click", () => {
+  if (!messages.length || !window.confirm("Clear the notes saved in this browser?")) return;
+  messages = [];
+  saveMessages();
+  renderMessages();
 });
 
 setTurnStatus(playerName(0) + "’s turn — flip two cards.");
