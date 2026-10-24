@@ -8,7 +8,8 @@ Open `index.html` in a browser. The game is a static first prototype and needs n
 
 ## What's here
 
-- A 12-card memory-match game for two players taking turns on one screen.
+- A memory-match game for two players taking turns on one screen.
+- Quick, classic, and long game lengths with 4, 6, or 8 pairs.
 - Earn a heart and a sweet conversation prompt for every matching pair.
 - A message corner that saves notes in the current browser on this device.
 - Responsive layout for desktop and phone screens.

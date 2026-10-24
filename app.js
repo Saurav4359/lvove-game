@@ -4,12 +4,15 @@ const pairs = [
   { symbol: "💌", prompt: "What did you first notice about me?" },
   { symbol: "🌙", prompt: "What would our perfect slow evening look like?" },
   { symbol: "☕", prompt: "Which ordinary day together would you happily relive?" },
-  { symbol: "🍒", prompt: "What’s something new you’d love for us to try together?" }
+  { symbol: "🍒", prompt: "What’s something new you’d love for us to try together?" },
+  { symbol: "🧸", prompt: "What’s a silly little thing that always makes you laugh?" },
+  { symbol: "🎂", prompt: "What would you put on our perfect celebration cake?" }
 ];
 
 const chatStorageKey = "ours-date-night-chat-v1";
 const namesStorageKey = "ours-date-night-player-names-v1";
 const defaultNames = ["You", "Partner"];
+let selectedPairCount = 6;
 let game = createGame();
 let messages = loadMessages();
 let playerNames = loadPlayerNames();
@@ -25,8 +28,8 @@ const messageList = document.querySelector("#chat-messages");
 const chatEmpty = document.querySelector("#chat-empty");
 const chatInput = document.querySelector("#chat-input");
 
-function createGame() {
-  const cards = pairs.flatMap((pair, pairId) => [
+function createGame(pairCount = selectedPairCount) {
+  const cards = pairs.slice(0, pairCount).flatMap((pair, pairId) => [
     { ...pair, pairId, key: pairId + "-a" },
     { ...pair, pairId, key: pairId + "-b" }
   ]);
@@ -34,7 +37,7 @@ function createGame() {
     const other = Math.floor(Math.random() * (index + 1));
     [cards[index], cards[other]] = [cards[other], cards[index]];
   }
-  return { cards, matched: new Set(), flipped: [], scores: [0, 0], activePlayer: 0, locked: false, over: false };
+  return { cards, pairsTotal: pairCount, matched: new Set(), flipped: [], scores: [0, 0], activePlayer: 0, locked: false, over: false };
 }
 
 function loadMessages() {
@@ -106,7 +109,7 @@ function renderBoard() {
 
   scoreYou.textContent = String(game.scores[0]);
   scorePartner.textContent = String(game.scores[1]);
-  const remaining = pairs.length - game.scores[0] - game.scores[1];
+  const remaining = game.pairsTotal - game.scores[0] - game.scores[1];
   pairsLeft.textContent = remaining + (remaining === 1 ? " PAIR LEFT" : " PAIRS LEFT");
 }
 
@@ -122,8 +125,8 @@ function finishGame() {
   game.over = true;
   const [you, partner] = game.scores;
   const result = you === partner ? "It’s a tie!" : you > partner ? playerName(0) + " wins this round!" : playerName(1) + " wins this round!";
-  setTurnStatus("You found all six pairs. " + result);
-  matchMessage.textContent = "Six sweet stories collected. Play again or stay here and talk.";
+  setTurnStatus("You found all " + game.pairsTotal + " pairs. " + result);
+  matchMessage.textContent = game.pairsTotal + " sweet stories collected. Play again or stay here and talk.";
 }
 
 function flipCard(index) {
@@ -171,12 +174,25 @@ board.addEventListener("click", (event) => {
   if (card) flipCard(Number(card.dataset.index));
 });
 
-document.querySelector("#new-game").addEventListener("click", () => {
+function startNewGame() {
   if (flipTimer) window.clearTimeout(flipTimer);
   game = createGame();
   matchMessage.textContent = "Find a pair, then tell the little story on the card.";
   setTurnStatus(playerName(0) + "’s turn — flip two cards.");
   renderBoard();
+}
+
+document.querySelector("#new-game").addEventListener("click", startNewGame);
+document.querySelectorAll(".mode-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    selectedPairCount = Number(button.dataset.pairs);
+    document.querySelectorAll(".mode-button").forEach((mode) => {
+      const selected = mode === button;
+      mode.classList.toggle("is-active", selected);
+      mode.setAttribute("aria-pressed", String(selected));
+    });
+    startNewGame();
+  });
 });
 
 document.querySelectorAll(".player-name-input").forEach((input, index) => {

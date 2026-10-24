@@ -233,3 +233,13 @@ h1 em { color: var(--rose); font-weight: 500; }
 @media (max-width: 590px) {
   .player-name-input { width: 59px; font-size: 8px; }
 }
+.game-modes { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.mode-label { margin-right: 3px; color: #a18e8c; font-size: 8px; font-weight: 700; letter-spacing: .12em; }
+.mode-button { min-height: 27px; padding: 0 10px; border: 1px solid #efe2dc; border-radius: 999px; color: #8d7978; background: #fffdfa; cursor: pointer; font-size: 9px; transition: border .18s, background .18s, color .18s; }
+.mode-button:hover { border-color: #e4b4ae; }
+.mode-button.is-active { border-color: #e4aaa4; color: #995158; background: #fff0ed; }
+@media (max-width: 590px) {
+  .game-modes { gap: 5px; }
+  .mode-button { padding-inline: 8px; }
+  .mode-label { font-size: 7px; }
+}
